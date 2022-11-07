@@ -62,7 +62,8 @@ pipeline {
             post {
                 success {
                     echo 'Run Success'
-                    slackSend color: "good", message: "Run Success"                    
+                    slackSend color: "good", message: "Run Success"   
+                    cleanWs()                 
                 }
                 failure {
                     echo 'Run Failed'
