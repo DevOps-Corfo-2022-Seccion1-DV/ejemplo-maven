@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build'){
             steps{
-                cleanWs()
+                // cleanWs()
                 slackSend color: "warning", message: "Comenzando build"
                 sh './mvnw clean compile -e'
             }
