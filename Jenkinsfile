@@ -7,6 +7,14 @@ pipeline {
                 slackSend color: "warning", message: "Comenzando build"
                 sh './mvnw clean compile -e'
             }
+            post {
+                success {
+                    slackSend color: "good", message: "El build ha terminado con éxito"
+                }
+                failure { 
+                    slackSend color: "danger", message: "El build ha fallado"
+                }
+            }
         }
         stage('Test'){
             steps{
@@ -25,14 +33,6 @@ pipeline {
                 slackSend color: "warning", message: "Comenzando run"
 		        sh '#./mvnw spring-boot:run'
             }
-        }
-    }
-    post {
-        success {
-            slackSend color: "good", message: "El Pipeline ha terminado con éxito"
-        }
-        failure { 
-            slackSend color: "danger", message: "El Pipeline ha fallado"
         }
     }
 }
