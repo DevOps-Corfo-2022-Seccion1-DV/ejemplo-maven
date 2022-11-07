@@ -16,7 +16,7 @@ pipeline {
         stage('Package'){
             steps{
                 slackSend color: "warning", message: "Comenzando package"
-		sh './mvnw clean package -e’
+		sh './mvnw clean package -e'
             }
         }
         stage('Run'){
