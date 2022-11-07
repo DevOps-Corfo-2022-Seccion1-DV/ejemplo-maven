@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage('Build'){
             steps{
+                cleanWs()
                 slackSend color: "warning", message: "Comenzando build"
                 sh './mvnw clean compile -e'
             }
@@ -10,19 +11,19 @@ pipeline {
         stage('Test'){
             steps{
                 slackSend color: "warning", message: "Comenzando test"
-		sh './mvnw clean test -e'
+		        sh './mvnw clean test -e'
             }
         }
         stage('Package'){
             steps{
                 slackSend color: "warning", message: "Comenzando package"
-		sh './mvnw clean package -e'
+		        sh './mvnw clean package -e'
             }
         }
         stage('Run'){
             steps{
                 slackSend color: "warning", message: "Comenzando run"
-		sh './mvnw spring-boot:run'
+		        sh '#./mvnw spring-boot:run'
             }
         }
     }
