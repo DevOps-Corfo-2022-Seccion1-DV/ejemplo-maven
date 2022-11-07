@@ -3,24 +3,35 @@ pipeline {
     stages {
         stage('Build'){
             steps{
-                echo 'TODO: build'
+                slackSend color: "warning", message: "Comenzando build”
                 sh './mvnw clean compile -e'
             }
         }
         stage('Test'){
             steps{
-                echo 'TODO: test'
+                slackSend color: "warning", message: "Comenzando test”
+		sh './mvnw clean test -e'
             }
         }
         stage('Package'){
             steps{
-                echo 'TODO: package'
+                slackSend color: "warning", message: "Comenzando package”
+		sh './mvnw clean package -e’
             }
         }
         stage('Run'){
             steps{
-                echo 'TODO: run'
+                slackSend color: "warning", message: "Comenzando run”
+		sh './mvnw spring-boot:run'
             }
+        }
+    }
+    post {
+        success {
+            slackSend color: "good", message: "El Pipeline ha terminado con éxito”
+        }
+        failure { 
+            slackSend color: "danger", message: "El Pipeline ha fallado“
         }
     }
 }
