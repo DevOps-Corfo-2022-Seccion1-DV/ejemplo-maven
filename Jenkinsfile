@@ -3,35 +3,71 @@ pipeline {
     stages {
         stage('Build'){
             steps{
-                // cleanWs()
-                slackSend color: "warning", message: "Comenzando build"
+                echo 'Building...'
+                slackSend color: "warning", message: "Building..."
                 sh './mvnw clean compile -e'
+
             }
             post {
                 success {
-                    slackSend color: "good", message: "El build ha terminado con éxito"
+                    echo 'Build Success'
+                    slackSend color: "good", message: "Build Success"
                 }
-                failure { 
-                    slackSend color: "danger", message: "El build ha fallado"
+                failure {
+                    echo 'Build Failed'
+                    slackSend color: "danger", message: "Build Failed"
                 }
             }
         }
         stage('Test'){
             steps{
-                slackSend color: "warning", message: "Comenzando test"
-		        sh './mvnw clean test -e'
+                echo 'Testing...'
+                slackSend color: "warning", message: "Testing..."
+                sh './mvnw test -e'
+            }
+            post {
+                success {
+                    echo 'Test Success'
+                    slackSend color: "good", message: "Test Success"
+                }
+                failure {
+                    echo 'Test Failed'
+                    slackSend color: "danger", message: "Test Failed"
+                }
             }
         }
         stage('Package'){
             steps{
-                slackSend color: "warning", message: "Comenzando package"
-		        sh './mvnw clean package -e'
+                echo 'Packaging...'
+                slackSend color: "warning", message: "Packaging..."
+                sh './mvnw package -e'
+            }
+            post {
+                success {
+                    echo 'Package Success'
+                    slackSend color: "good", message: "Package Success"
+                }
+                failure {
+                    echo 'Package Failed'
+                    slackSend color: "danger", message: "Package Failed"
+                }
             }
         }
         stage('Run'){
             steps{
-                slackSend color: "warning", message: "Comenzando run"
-		        sh '#./mvnw spring-boot:run'
+                echo 'Running...'
+                slackSend color: "warning", message: "Running..."
+                sh '#./mvnw spring-boot:run -e'
+            }
+            post {
+                success {
+                    echo 'Run Success'
+                    slackSend color: "good", message: "Run Success"                    
+                }
+                failure {
+                    echo 'Run Failed'
+                    slackSend color: "danger", message: "Run Failed"
+                }
             }
         }
     }
