@@ -45,22 +45,28 @@ public class RestData {
 		int confirmed = 0;
 		int death = 0;
 		int recovered = 0;
-		Gson gson = new Gson();
-        Pais[] estados = gson.fromJson(call.getBody().toLowerCase(), Pais[].class);
+		String resp = call.getBody();
 
-        for(Pais estado : estados) {
-        	response.setDate(estado.getDate());
-        	response.setActive(estado.getActive());
-        	confirmed += estado.getConfirmed();
-        	death += estado.getDeaths();
-        	recovered += estado.getRecovered();
-        }
-        
-    	response.setConfirmed(confirmed);
-    	response.setDeaths(death);
-    	response.setRecovered(recovered);
-    	response.setCountry(message);
-    	response.setMensaje("ok");
+		if(resp != null){
+			Gson gson = new Gson();
+			Pais[] estados = gson.fromJson(resp.toLowerCase(), Pais[].class);
+			for(Pais estado : estados) {
+				response.setDate(estado.getDate());
+				response.setActive(estado.getActive());
+				confirmed += estado.getConfirmed();
+				death += estado.getDeaths();
+				recovered += estado.getRecovered();
+			}
+			
+			response.setConfirmed(confirmed);
+			response.setDeaths(death);
+			response.setRecovered(recovered);
+			response.setCountry(message);
+			response.setMensaje("ok");
+		}else{
+			response.setMensaje("bad country");
+		}
+
 
 		return response;		
 	}
@@ -73,13 +79,20 @@ public class RestData {
 		
 		RestTemplate restTemplate = new RestTemplate();
 	    ResponseEntity<String> call= restTemplate.getForEntity("https://api.covid19api.com/world/total" ,String.class);
-	    Mundial response = new Mundial();
-		Gson gson = new Gson();
-        Mundial estado = gson.fromJson(call.getBody().toLowerCase(), Mundial.class);
-        response.setTotalConfirmed(estado.getTotalConfirmed());
-        response.setTotalDeaths(estado.getTotalDeaths());
-        response.setTotalRecovered(estado.getTotalRecovered());
+		String resp = call.getBody();
+		Mundial response = new Mundial();
 
-		return response;		
+		if(resp != null){
+			Gson gson = new Gson();
+			Mundial estado = gson.fromJson(resp.toLowerCase(), Mundial.class);
+			response.setTotalConfirmed(estado.getTotalConfirmed());
+			response.setTotalDeaths(estado.getTotalDeaths());
+			response.setTotalRecovered(estado.getTotalRecovered());
+			return response;		
+		}else{
+			return null;
+		}
+
+
 	}
 }
